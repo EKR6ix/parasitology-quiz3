@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>វិញ្ញាសាអនុវត្តប៉ារ៉ាស៊ីតវិទ្យា៖ Trematodes & Protozoa - ថ្នាក់ BSL ឆ្នាំទី១</title>
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b1120;
+  --card: #15203b;
+  --card-border: #1e293b;
+  --primary: #38bdf8;
+  --primary-hover: #0284c7;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #f59e0b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', 'Inter', system-ui, sans-serif; }
+body { background: var(--bg); color: var(--text); min-height: 100vh; padding: 16px; display: flex; flex-direction: column; align-items: center; }
+.wrap { width: 100%; max-width: 820px; margin: 0 auto; }
+header.hero { text-align: center; margin-bottom: 20px; }
+.hero h1 { font-size: 1.35rem; color: var(--primary); margin-bottom: 6px; line-height: 1.4; }
+.hero p { color: var(--text-muted); font-size: 0.88rem; }
+.card { background: var(--card); border: 1px solid var(--card-border); border-radius: 14px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.status-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--card-border); font-size: 0.88rem; }
+.badge { background: #0369a1; color: #bae6fd; padding: 4px 10px; border-radius: 9999px; font-weight: 600; font-size: 0.75rem; }
+.timer-box { font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 6px; font-size: 1.05rem; }
+.timer-box.urgent { color: var(--danger); }
+.question-title { font-size: 1.05rem; line-height: 1.6; font-weight: 600; margin-bottom: 14px; color: var(--text); }
+.diagram-box { display: flex; justify-content: center; align-items: center; background: #080e1e; border: 1px solid #1e3a8a; border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+.options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.option-btn { background: #0b1120; border: 1px solid var(--card-border); color: var(--text); padding: 14px 16px; border-radius: 10px; text-align: left; font-size: 0.94rem; cursor: pointer; transition: all 0.15s ease; line-height: 1.5; display: flex; align-items: flex-start; gap: 10px; }
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: #1a253c; }
+.option-btn:disabled { cursor: default; }
+.option-btn.correct { background: rgba(34, 197, 94, 0.22) !important; border-color: var(--success) !important; color: #86efac; font-weight: 600; }
+.option-btn.wrong { background: rgba(239, 68, 68, 0.22) !important; border-color: var(--danger) !important; color: #fca5a5; }
+.letter { font-weight: 700; color: var(--primary); font-size: 1.05rem; min-width: 25px; }
+.hint-section { margin-bottom: 16px; }
+.hint-btn { background: none; border: none; color: var(--accent); font-size: 0.88rem; cursor: pointer; text-decoration: underline; padding: 0; }
+.hint-content { display: none; margin-top: 8px; background: rgba(245, 158, 11, 0.12); border-left: 3px solid var(--accent); padding: 10px 14px; border-radius: 4px; font-size: 0.88rem; color: #fde68a; line-height: 1.5; }
+.feedback-box { display: none; background: #0d1a33; border: 1px solid #2563eb; border-radius: 10px; padding: 16px; margin-bottom: 16px; line-height: 1.5; font-size: 0.9rem; }
+.feedback-box h4 { margin-bottom: 8px; color: #93c5fd; font-size: 0.95rem; }
+.controls { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.action-btn { background: var(--primary); color: #090d16; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 0.92rem; cursor: pointer; transition: background 0.15s; }
+.action-btn:hover { background: var(--primary-hover); }
+.action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.progress-wrap { margin-top: 20px; }
+.progress-bar-bg { background: #1e293b; height: 8px; border-radius: 9999px; overflow: hidden; }
+.progress-bar-fill { background: var(--primary); height: 100%; width: 3.33%; transition: width 0.3s; }
+.final-screen { display: none; text-align: center; padding: 36px 12px; }
+.final-score { font-size: 3rem; font-weight: 800; color: var(--primary); margin: 16px 0; }
+.review-list { margin-top: 20px; text-align: left; }
+.review-item { border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; margin-bottom: 10px; background: #0b1120; font-size: 0.88rem; }
+.review-item summary { cursor: pointer; font-weight: 700; color: var(--primary); }
+.review-item p { margin-top: 6px; color: #cbd5e1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>វិញ្ញាសាអនុវត្ត៖ Trematodes & Protozoa</h1>
+    <p>សម្រាប់និស្សិតបច្ចេកទេសមន្ទីរពិសោធន៍ BSL ឆ្នាំទី១ • ៣០ សំណួរចៃដន្យ (Shuffle) • ៦០ វិនាទី</p>
+  </header>
+
+  <div class="card" id="quizCard">
+    <div class="status-bar">
+      <span class="badge" id="topicBadge">Trematodes & Protozoa</span>
+      <span id="qCount" style="font-weight:600;">សំណួរទី 1 នៃ 30</span>
+      <div class="timer-box" id="timerBox">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="timerText">60s</span>
+      </div>
+    </div>
+
+    <div id="diagramContainer" class="diagram-box"></div>
+
+    <div class="question-title" id="questionTitle"></div>
+
+    <div class="hint-section">
+      <button class="hint-btn" id="hintToggleBtn" onclick="toggleHint()">💡 បង្ហាញតម្រុយគ្លីនិក (Show Hint)</button>
+      <div class="hint-content" id="hintContent"></div>
+    </div>
+
+    <div class="options-grid" id="optionsGrid"></div>
+
+    <div class="feedback-box" id="feedbackBox">
+      <h4>ការពន្យល់លម្អិតក្នុងមន្ទីរពិសោធន៍ (Lab Rationale):</h4>
+      <div id="feedbackText"></div>
+    </div>
+
+    <div class="controls">
+      <span style="font-size:0.88rem; color:var(--text-muted);" id="liveScore">ពិន្ទុ: 0 / 0</span>
+      <button class="action-btn" id="nextBtn" onclick="nextQuestion()" disabled>សំណួរបន្ទាប់ →</button>
+    </div>
+  </div>
+
+  <div class="card final-screen" id="finalCard">
+    <h2>បញ្ចប់ការធ្វើតេស្ត!</h2>
+    <p style="margin-top:8px; color:var(--text-muted);">អ្នកបានឆ្លងកាត់ការអនុវត្តវិញ្ញាសា Trematodes និង Protozoa រួចរាល់ហើយ។</p>
+    <div class="final-score" id="finalScoreVal">0%</div>
+    <p id="finalFeedback" style="margin-bottom: 24px; color: #cbd5e1; font-size:1.02rem; line-height:1.6;"></p>
+    <button class="action-btn" onclick="initQuiz()">ធ្វើវិញ្ញាសាសាឡើងវិញ (Shuffle ថ្មី)</button>
+    <div class="review-list" id="reviewContainer"></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const rawQuestions = [
+  {
+    topic: "Schistosoma — Egg Morphology",
+    title: "អ្នកបច្ចេកទេសពិនិត្យលាមករបស់អ្នកជំងឺម្នាក់ ឃើញពងព្រូនរាងពងក្រពើធំ (115-175 µm) ដែលមានបន្លាចំហៀងស្រួចធំច្បាស់ (Prominent lateral spine)។ តើនេះជាពងរបស់ Schistosoma ប្រភេទណា?",
+    hint: "មានបន្លានៅចំហៀងខ្លួន (Lateral spine) ឃើញក្នុងលាមក។",
+    svg: `<svg width="220" height="90" viewBox="0 0 220 90"><ellipse cx="110" cy="45" rx="75" ry="32" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/><path d="M 155,62 L 180,82 L 163,55 Z" fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5"/><circle cx="105" cy="45" r="18" fill="#334155" stroke="#94a3b8" stroke-dasharray="3 2"/><text x="110" y="49" fill="#f8fafc" font-size="10" text-anchor="middle">Miracidium</text><text x="180" y="88" fill="#f59e0b" font-size="9">Lateral spine</text></svg>`,
+    options: [
+      { text: "Schistosoma mansoni", isCorrect: true },
+      { text: "Schistosoma haematobium", isCorrect: false },
+      { text: "Schistosoma japonicum", isCorrect: false },
+      { text: "Schistosoma mekongi", isCorrect: false }
+    ],
+    rationale: "Schistosoma mansoni បញ្ចេញពងក្នុងលាមក ដែលមានលក្ខណៈសម្គាល់ច្បាស់បំផុតគឺបន្លាចំហៀងស្រួចធំ (Prominent lateral spine)។ ចំណែក S. haematobium មាន terminal spine នៅចុងពង (រកឃើញក្នុងទឹកនោម)។"
+  },
+  {
+    topic: "Schistosoma — Urine Examination",
+    title: "អ្នកបច្ចេកទេសពិនិត្យកករទឹកនោម (Urine sediment) របស់អ្នកជំងឺនោមឈាម (Hematuria) ឃើញពងព្រូនរាងពងក្រពើដែលមានបន្លានៅចុងស្រួច (Terminal spine)។ តើជាពងរបស់ព្រូនអ្វី?",
+    hint: "រកឃើញក្នុងទឹកនោម និងបង្ក urogenital schistosomiasis។",
+    svg: `<svg width="220" height="90" viewBox="0 0 220 90"><ellipse cx="110" cy="45" rx="70" ry="28" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/><path d="M 180,45 L 205,45 L 180,41 Z" fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5"/><circle cx="110" cy="45" r="16" fill="#334155" stroke="#94a3b8" stroke-dasharray="3 2"/><text x="110" y="49" fill="#f8fafc" font-size="10" text-anchor="middle">Miracidium</text><text x="185" y="65" fill="#f59e0b" font-size="9">Terminal spine</text></svg>`,
+    options: [
+      { text: "Schistosoma haematobium", isCorrect: true },
+      { text: "Schistosoma mansoni", isCorrect: false },
+      { text: "Schistosoma mekongi", isCorrect: false },
+      { text: "Fasciolopsis buski", isCorrect: false }
+    ],
+    rationale: "Schistosoma haematobium រស់នៅក្នុង venous plexus នៃប្លោកនោម និងផ្លូវបង្ហូរនោម ហើយពងរបស់វាមានបន្លានៅចុងស្រួច (Terminal spine) ដែលត្រូវបញ្ចេញមកក្រៅតាមទឹកនោម (Urine)។"
+  },
+  {
+    topic: "Schistosoma mekongi — Cambodia Endemic",
+    title: "យោងតាមស្លាយមេរៀន តើ Schistosoma mekongi មានការឆ្លងរាតត្បាតជាពិសេសនៅតាមបណ្តាភូមិជាប់ដងទន្លេមេគង្គ (តំបន់ថ្មដុះ) ក្នុងខេត្តណាខ្លះនៃប្រទេសកម្ពុជា?",
+    hint: "ខេត្តភាគឦសានចំនួន ២ ដែលនៅជាប់ដងទន្លេមេគង្គ។",
+    options: [
+      { text: "ខេត្តក្រចេះ និងខេត្តស្ទឹងត្រែង", isCorrect: true },
+      { text: "ខេត្តបាត់ដំបង និងខេត្តសៀមរាប", isCorrect: false },
+      { text: "ខេត្តកំពត និងខេត្តកែប", isCorrect: false },
+      { text: "ខេត្តកណ្តាល និងខេត្តកំពង់ចាម", isCorrect: false }
+    ],
+    rationale: "Schistosoma mekongi នៅកម្ពុជាមានតំបន់ឆ្លងរាតត្បាត (Endemic areas) ចំនួន ១១៤ ភូមិ ស្ថិតក្នុងខេត្តក្រចេះ និងខេត្តស្ទឹងត្រែង តាមបណ្តោយទន្លេមេគង្គដែលមានខ្យង Neotricula aperta រស់នៅលើថ្មទឹកហូរ។"
+  },
+  {
+    topic: "Schistosoma mekongi — Intermediate Host",
+    title: "តើខ្យងទឹកសាបប្រភេទណាជាម្ចាស់ផ្ទះកណ្តាល (Intermediate host) តែមួយគត់សម្រាប់ Schistosoma mekongi នៅកម្ពុជា?",
+    hint: "ខ្យងតូចៗដែលតោងជាប់នឹងដុំថ្មក្នុងទន្លេមេគង្គ។",
+    options: [
+      { text: "Neotricula aperta", isCorrect: true },
+      { text: "Biomphalaria", isCorrect: false },
+      { text: "Bulinus", isCorrect: false },
+      { text: "Oncomelania", isCorrect: false }
+    ],
+    rationale: "Neotricula aperta គឺជាខ្យងម្ចាស់ផ្ទះកណ្តាលរបស់ S. mekongi។ ចំណែក Biomphalaria សម្រាប់ S. mansoni, Bulinus សម្រាប់ S. haematobium/intercalatum, និង Oncomelania សម្រាប់ S. japonicum។"
+  },
+  {
+    topic: "Schistosoma — Mode of Infection",
+    title: "តើដង្កូវ Schistosoma ឆ្លងចូលទៅក្នុងខ្លួនមនុស្ស (Definitive host) តាមរយៈដំណាក់កាល និងផ្លូវណា?",
+    hint: "ដង្កូវកន្ទុយខ្វែក (Forked tail) ហែលក្នុងទឹកទម្លុះស្បែក។",
+    options: [
+      { text: "Cercariae ហែលក្នុងទឹកទម្លុះស្បែកមនុស្ស (Skin penetration)", isCorrect: true },
+      { text: "លេប Metacercariae ដែលតោងលើបន្លែទឹក", isCorrect: false },
+      { text: "ញ៉ាំត្រីឆៅដែលមាន Encysted larvae", isCorrect: false },
+      { text: "លេបស៊ុត Miracidium ក្នុងទឹកផឹក", isCorrect: false }
+    ],
+    rationale: "Schistosoma ឆ្លងតាមរយៈដង្កូវ Cercariae (មានកន្ទុយខ្វែក) ហែលក្នុងទឹកសាប ហើយទម្លុះស្បែកមនុស្សផ្ទាល់ (Skin penetration) នៅពេលចុះងូតទឹក ឬប៉ះពាល់ទឹកទន្លេដែលមានមេរោគ។"
+  },
+  {
+    topic: "Opisthorchis viverrini — Morphology",
+    title: "ក្រោមមីក្រូទស្សន៍ អ្នកបច្ចេកទេសពិនិត្យលាមកឃើញពងព្រូនតូចល្អិតទំហំប្រហែល 30 × 15 µm រាងដូចអំពូលភ្លើង ឬផ្លែត្រសក់ស្រូវ មានគម្រប (Operculum) និងមានកន្ទុយប៊ូតុងតូចនៅចុង (Terminal knob)។ តើជាពងរបស់ព្រូនអ្វី?",
+    hint: "ព្រូនថ្លើមដែលឆ្លងតាមរយៈការញ៉ាំត្រីទឹកសាបឆៅនៅកម្ពុជា។",
+    svg: `<svg width="200" height="85" viewBox="0 0 200 85"><ellipse cx="100" cy="45" rx="42" ry="22" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/><path d="M 58,38 Q 63,45 58,52" fill="none" stroke="#f59e0b" stroke-width="3"/><path d="M 142,45 A 3,3 0 1,1 145,45" fill="#f59e0b" stroke="#f59e0b" stroke-width="2"/><text x="100" y="49" fill="#f8fafc" font-size="10" text-anchor="middle">Miracidium</text><text x="42" y="30" fill="#f59e0b" font-size="9">Operculum</text><text x="148" y="50" fill="#f59e0b" font-size="9">Knob</text></svg>`,
+    options: [
+      { text: "Opisthorchis viverrini (Liver fluke)", isCorrect: true },
+      { text: "Ascaris lumbricoides", isCorrect: false },
+      { text: "Enterobius vermicularis", isCorrect: false },
+      { text: "Schistosoma mansoni", isCorrect: false }
+    ],
+    rationale: "ពង Opisthorchis viverrini មានទំហំតូចល្អិត (30 × 15 µm), មានគម្របច្បាស់ (Operculated with seated shoulder) និងមានពកកន្ទុយតូច (Small knob) នៅផ្នែកចុងផ្ទុយពីគម្រប។"
+  },
+  {
+    topic: "Opisthorchis viverrini — Transmission in Cambodia",
+    title: "នៅប្រទេសកម្ពុជា ការឆ្លងព្រូនថ្លើម Opisthorchis viverrini កើតឡើងខ្លាំងបំផុតដោយសារទម្លាប់បរិភោគម្ហូបអ្វី?",
+    hint: "ម្ហូបត្រីទឹកសាបមិនឆ្អិន ដូចជាត្រីស្រកាក្តាម ត្រីអាចម៍កុក ត្រីអង្កត់ប្រាក់។",
+    options: [
+      { text: "ញ៉ាំត្រីទឹកសាបឆៅ ភ្លាត្រី ផ្អក ឬប្រហុកឆៅផ្ទុក Metacercariae", isCorrect: true },
+      { text: "ញ៉ាំសាច់ជ្រូកឆៅផ្ទុក Cysticerci", isCorrect: false },
+      { text: "ផឹកទឹកអណ្តូងមិនបានចម្រោះផ្ទុក Cyclops", isCorrect: false },
+      { text: "ញ៉ាំសាច់ក្តាម ឬបង្គាស្ងោរមិនឆ្អិន", isCorrect: false }
+    ],
+    rationale: "មនុស្សឆ្លង Opisthorchis viverrini តាមរយៈការញ៉ាំត្រីទឹកសាប (ពពួកត្រី Cyprinoid ដូចជា ត្រីស្រកាក្តាម ត្រីអាចម៍កុក ត្រីអង្កត់ប្រាក់) ឆៅ ឬចម្អិនមិនឆ្អិនល្អ (ភ្លាត្រី ផ្អក ត្រីប្រឡាក់) ដែលផ្ទុកដង្កូវ Metacercariae។"
+  },
+  {
+    topic: "Opisthorchis viverrini — Severe Complication",
+    title: "ការឆ្លងព្រូនថ្លើម Opisthorchis viverrini រ៉ាំរ៉ៃរាប់សិបឆ្នាំក្នុងផ្លូវទឹកប្រមាត់ អាចវិវត្តទៅជាជំងឺមហារីកដ៏កាចសាហាវមួយណា?",
+    hint: "មហារីកបំពង់ទឹកប្រមាត់ (Cholangiocarcinoma - CCA)។",
+    options: [
+      { text: "មហារីកបំពង់ទឹកប្រមាត់ (Cholangiocarcinoma / CCA)", isCorrect: true },
+      { text: "មហារីកកោសិកាឈាមស (Leukemia)", isCorrect: false },
+      { text: "មហារីកក្រពេញប្រូស្តាត (Prostate cancer)", isCorrect: false },
+      { text: "មហារីកឆ្អឹង (Osteosarcoma)", isCorrect: false }
+    ],
+    rationale: "វត្តមានព្រូន O. viverrini ពេញវ័យរស់នៅក្នុងបំពង់ទឹកប្រមាត់ (Bile ducts) រយៈពេលយូរ (អាចដល់ ២០ ឆ្នាំ) បង្កឱ្យមានការរលាករ៉ាំរ៉ៃ និងក្លាយជាកត្តាបង្កចម្បងនៃជំងឺមហារីកបំពង់ទឹកប្រមាត់ (Cholangiocarcinoma / CCA)។"
+  },
+  {
+    topic: "Opisthorchis viverrini — Intermediate Hosts",
+    title: "តើសត្វណាខ្លះជាម្ចាស់ផ្ទះកណ្តាលទី១ (1st int. host) និងទី២ (2nd int. host) របស់ Opisthorchis viverrini តាមលំដាប់លំដោយ?",
+    hint: "ខ្យង Bithynia និងត្រីទឹកសាប Cyprinid fish។",
+    options: [
+      { text: "ខ្យង Bithynia snail (ទី១) និង ត្រីទឹកសាប Cyprinid fish (ទី២)", isCorrect: true },
+      { text: "ខ្យង Bulinus (ទី១) និង ក្តាមទឹកសាប (ទី២)", isCorrect: false },
+      { text: "ត្រីទឹកសាប (ទី១) និង សត្វឆ្មា (ទី២)", isCorrect: false },
+      { text: "សត្វកណ្តូបទឹក Cyclops (ទី១) និង ខ្យង (ទី២)", isCorrect: false }
+    ],
+    rationale: "O. viverrini ត្រូវការម្ចាស់ផ្ទះកណ្តាលពីរ៖ ទី១ គឺខ្យងទឹកសាប Bithynia sp. (ដែល Cercariae លូតលាស់) និង ទី២ គឺត្រីទឹកសាបពពួក Cyprinidae (ដែល Cercariae ទៅកកើតជា Metacercariae ក្នុងសាច់ត្រី)។"
+  },
+  {
+    topic: "Fasciolopsis buski — Giant Intestinal Fluke",
+    title: "Fasciolopsis buski ត្រូវបានគេស្គាល់ថាជាព្រូនស្លឹកធំបំផុតក្នុងពោះវៀនមនុស្ស (Giant intestinal fluke)។ តើមនុស្សឆ្លងព្រូននេះតាមរបៀបណា?",
+    hint: "បកញ៉ាំមើម ឬបន្លែទឹកឆៅ (Water chestnut, ត្រកួន, ក្រអៅឈូក) ដែលមាន Metacercariae តោង។",
+    options: [
+      { text: "ញ៉ាំរុក្ខជាតិ ឬបន្លែទឹកឆៅ (Aquatic plants) ដែលមានតោង Metacercariae", isCorrect: true },
+      { text: "ញ៉ាំសាច់គោអាំងឆៅ", isCorrect: false },
+      { text: "ត្រូវដង្កូវទម្លុះស្បែកពេលដើរជើងទទេ", isCorrect: false },
+      { text: "ត្រូវមូសខាំពេលយប់", isCorrect: false }
+    ],
+    rationale: "Fasciolopsis buski បញ្ចេញ Cercariae ពីខ្យង ទៅតោងបង្កើតជាគីស Metacercariae លើរុក្ខជាតិ ឬបន្លែទឹក (Aquatic vegetation ដូចជា កំផ្លោក ត្រកួន ត្រចៀកកាំ ក្រអៅឈូក)។ មនុស្សឆ្លងដោយសារយកមាត់បកសំបក ឬញ៉ាំបន្លែទឹកទាំងនោះឆៅ។"
+  },
+  {
+    topic: "Paragonimus westermani — Lung Fluke",
+    title: "អ្នកជំងឺម្នាក់មានអាការៈក្អកធ្លាក់ឈាម (Hemoptysis) និងឈឺទ្រូង។ ពិនិត្យកំហាក (Sputum) ឃើញពងព្រូនធំៗមានគម្រប (Operculated eggs)។ តើជាព្រូនប្រភេទណា?",
+    hint: "Lung fluke ដែលឆ្លងតាមការញ៉ាំក្តាម ឬបង្កងទឹកសាបឆៅ។",
+    options: [
+      { text: "Paragonimus westermani (Lung fluke)", isCorrect: true },
+      { text: "Fasciolopsis buski", isCorrect: false },
+      { text: "Schistosoma mansoni", isCorrect: false },
+      { text: "Opisthorchis viverrini", isCorrect: false }
+    ],
+    rationale: "Paragonimus westermani គឺជាព្រូនស្លឹកសួត (Lung fluke) ដែលរស់នៅក្នុងសួតមនុស្ស បង្កដំបៅ ក្អកស្លេសលាយឈាម (Hemoptysis) ហើយពងរបស់វាអាចរកឃើញនៅក្នុងកំហាក (Sputum) ឬលាមក។"
+  },
+  {
+    topic: "Paragonimus westermani — 2nd Intermediate Host",
+    title: "តើសត្វមួយណាជាម្ចាស់ផ្ទះកណ្តាលទី២ (2nd intermediate host) សម្រាប់ព្រូនសួត Paragonimus westermani?",
+    hint: "សត្វទឹកសាបមានស្នូក ឬដង្កៀប។",
+    options: [
+      { text: "ក្តាមទឹកសាប ឬបង្កងទឹកសាប (Freshwater crab / Crayfish)", isCorrect: true },
+      { text: "ត្រីទឹកសាប Cyprinid fish", isCorrect: false },
+      { text: "សត្វជ្រូកស្រុក", isCorrect: false },
+      { text: "សត្វគោក្របី", isCorrect: false }
+    ],
+    rationale: "Paragonimus westermani ឆ្លងពីខ្យង (1st host) ទៅកកើតជា Metacercariae នៅក្នុងសាច់ អញ្ចាញ និងសរីរាង្គក្នុងរបស់ក្តាមទឹកសាប (Crabs) ឬបង្កងទឹកសាប (Crayfish) ដែលជា 2nd intermediate host។"
+  },
+  {
+    topic: "Trematodes — Drug of Choice",
+    title: "តើថ្នាំមួយណាជាជម្រើសទីមួយ (Drug of choice) ដ៏មានប្រសិទ្ធភាពបំផុតសម្រាប់ព្យាបាលការឆ្លង Schistosoma, Opisthorchis និង Paragonimus?",
+    hint: "ថ្នាំបញ្ចុះព្រូនសំប៉ែតកម្រិត 40-60 mg/kg។",
+    options: [
+      { text: "Praziquantel", isCorrect: true },
+      { text: "Metronidazole", isCorrect: false },
+      { text: "Mebendazole", isCorrect: false },
+      { text: "Chloroquine", isCorrect: false }
+    ],
+    rationale: "Praziquantel គឺជាថ្នាំជម្រើសទីមួយដ៏សំខាន់សម្រាប់ព្យាបាលពពួកព្រូនស្លឹក (Trematodes) ស្ទើរតែទាំងអស់ រួមមាន Schistosoma (40-60 mg/kg), Opisthorchis viverrini (40 mg/kg), និង Paragonimus westermani។"
+  },
+  {
+    topic: "Trematodes vs Nematodes/Cestodes",
+    title: "តើលក្ខណៈរូបសាស្ត្រមួយណាដែលជាករណីលើកលែងរបស់ Schistosomes បើប្រៀបធៀបទៅនឹង Trematodes ដទៃទៀត?",
+    hint: "Trematodes ភាគច្រើនជា hermaphrodite និងរាងស្លឹក លើកលែងតែ Schistosomes។",
+    options: [
+      { text: "មានភេទឈ្មោល និងញីដាច់ពីគ្នា (Separate sexes) និងមានរាងស៊ីឡាំងវែង", isCorrect: true },
+      { text: "គ្មានបំពង់រំលាយអាហារទាល់តែសោះ", isCorrect: false },
+      { text: "មានកង់ៗដូចខ្សែបូ", isCorrect: false },
+      { text: "បង្កកំណើតដោយស្វ័យប្រវត្តិក្នុងខ្លួនតែមួយ", isCorrect: false }
+    ],
+    rationale: "យោងតាមស្លាយមេរៀន៖ Trematodes ភាគច្រើនមានរាងសំប៉ែតដូចស្លឹក និងមានភេទរួម (Hermaphrodite) ប៉ុន្តែ Schistosomes គឺជាករណីលើកលែង ព្រោះពួកវាមានរាងមូលទ្រវែងដូចអំបោះ និងមានភេទឈ្មោល-ញីដាច់ពីគ្នា (Separate sexes / Dioecious)។"
+  },
+  {
+    topic: "Entamoeba histolytica — Diagnostic Identification",
+    title: "ក្នុងលាមកស្រស់របស់អ្នកជំងឺរាគមួល (Amebic dysentery) តើវត្តមានអ្វីនៅក្នុងប្លាស្មារបស់ Trophozoite ដែលបញ្ជាក់ច្បាស់ថាជា Entamoeba histolytica ពិតប្រាកដ?",
+    hint: "អាម៉ីបស៊ីកោសិកាឈាមក្រហមចូលទៅក្នុងខ្លួន (Ingested RBCs)។",
+    svg: `<svg width="220" height="90" viewBox="0 0 220 90"><path d="M 40,45 Q 60,15 110,25 Q 160,15 180,45 Q 190,75 140,75 Q 90,85 40,45 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/><circle cx="130" cy="45" r="14" fill="#334155" stroke="#94a3b8"/><circle cx="130" cy="45" r="3" fill="#f8fafc"/><circle cx="75" cy="40" r="7" fill="#ef4444"/><circle cx="95" cy="55" r="6.5" fill="#ef4444"/><circle cx="80" cy="62" r="6" fill="#ef4444"/><text x="130" y="70" fill="#94a3b8" font-size="8" text-anchor="middle">Nucleus</text><text x="75" y="28" fill="#ef4444" font-size="9">Ingested RBCs</text></svg>`,
+    options: [
+      { text: "Trophozoite លេបស៊ីគ្រាប់ឈាមក្រហមនៅខាងក្នុង (Ingested RBCs / Erythrophagocytosis)", isCorrect: true },
+      { text: "វត្តមានគ្រាប់ខ្សាច់ ឬកម្ទេចស្លឹកឈើ", isCorrect: false },
+      { text: "វត្តមានទង់រំពាត់ ៤ គូ", isCorrect: false },
+      { text: "វត្តមានបន្លានៅចុងកន្ទុយ", isCorrect: false }
+    ],
+    rationale: "ការសង្កេតឃើញ Trophozoite ធ្វើចលនាដោយជើងបញ្ឆោត (Pseudopodia) ហើយមានលេបស៊ីគ្រាប់ឈាមក្រហមនៅខាងក្នុង (Ingested erythrocytes) គឺជាលក្ខណៈវិនិច្ឆ័យច្បាស់លាស់ (Diagnostic feature) ដើម្បីបញ្ជាក់ E. histolytica ពីពពួកអាម៉ីបមិនបង្កជំងឺដទៃ។"
+  },
+  {
+    topic: "Entamoeba histolytica — Cyst Morphology",
+    title: "តើគីសចាស់ពេញវ័យ (Mature infective cyst) របស់ Entamoeba histolytica មានស្នូលកោសិកា (Nuclei) ចំនួនប៉ុន្មាន?",
+    hint: "Quadrinucleate cyst (មានស្នូល ៤)។",
+    svg: `<svg width="180" height="85" viewBox="0 0 180 85"><circle cx="90" cy="42" r="34" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/><circle cx="76" cy="32" r="6" fill="#334155" stroke="#f59e0b"/><circle cx="104" cy="32" r="6" fill="#334155" stroke="#f59e0b"/><circle cx="76" cy="52" r="6" fill="#334155" stroke="#f59e0b"/><circle cx="104" cy="52" r="6" fill="#334155" stroke="#f59e0b"/><rect x="85" y="38" width="10" height="4" rx="2" fill="#38bdf8"/><text x="90" y="72" fill="#94a3b8" font-size="8" text-anchor="middle">4 Nuclei + Chromatoid bar</text></svg>`,
+    options: [
+      { text: "មានស្នូល ៤ (Quadrinucleate cyst) និងមាន Chromatoid bar រាងទ្រវែង", isCorrect: true },
+      { text: "មានស្នូលតែ ១ គត់ជានិច្ច", isCorrect: false },
+      { text: "មានស្នូល ៨ ដូច Entamoeba coli", isCorrect: false },
+      { text: "គ្មានស្នូលកោសិកាឡើយ", isCorrect: false }
+    ],
+    rationale: "គីសឆ្លងចាស់ពេញវ័យរបស់ E. histolytica មានស្នូលចំនួន ៤ (Quadrinucleate) មានទំហំ 12–18 µm និងមានដុំ Chromatoid bar ចុងរាងមូលដូចបារី ខណៈដែល E. coli គីសពេញវ័យមានស្នូលរហូតដល់ ៨។"
+  },
+  {
+    topic: "Entamoeba histolytica — Extra-intestinal Amebiasis",
+    title: "នៅពេលដែល Trophozoites របស់ E. histolytica ទម្លុះជញ្ជាំងពោះវៀនចូលទៅក្នុងចរន្តឈាម Portal circulation តើសរីរាង្គក្រៅពោះវៀនណាដែលវាងាយទៅបង្កជាដំបៅខ្ទុះ (Abscess) ញឹកញាប់ជាងគេបំផុត?",
+    hint: "ថ្លើម (Amebic liver abscess) ដែលមានខ្ទុះពណ៌ដូចទឹកត្រី ឬសូកូឡា (Anchovy sauce pus)។",
+    options: [
+      { text: "ថ្លើម (Amoebic liver abscess)", isCorrect: true },
+      { text: "តម្រងនោម (Kidney)", isCorrect: false },
+      { text: "លំពែង (Pancreas)", isCorrect: false },
+      { text: "ឆ្អឹងកងខ្នង (Spine)", isCorrect: false }
+    ],
+    rationale: "សរីរាង្គក្រៅពោះវៀនដែលរងការវាយលុកញឹកញាប់បំផុតគឺ ថ្លើម (Amebic liver abscess) ដោយសារឈាមពីពោះវៀនហូរចូលថ្លើមតាម Portal vein។ ខ្ទុះក្នុងថ្លើមមានលក្ខណៈពិសេសពណ៌ត្នោតក្រហមដូចទឹកជ្រលក់ Anchovy sauce។"
+  },
+  {
+    topic: "Amebiasis — Treatment Strategy",
+    title: "ចំពោះអ្នកជំងឺរលាកពោះវៀន ឬបូសថ្លើមដោយសារអាម៉ីប តើការប្រើប្រាស់ថ្នាំត្រូវបានបែងចែកជាពីរជម្រើសយ៉ាងដូចម្តេចតាមស្លាយមេរៀន?",
+    hint: "ថ្នាំសម្លាប់មេរោគក្នុងជាលិកា (Tissue amebicide) និងក្នុងប្រហោងពោះវៀន (Luminal amebicide)។",
+    options: [
+      { text: "Tissue amebiasis ប្រើ Metronidazole/Tinidazole រីឯ Luminal amebiasis ប្រើ Diloxanide furoate/Paromomycin", isCorrect: true },
+      { text: "ប្រើតែថ្នាំ Penicillin ចាក់សរសៃឈាម", isCorrect: false },
+      { text: "ប្រើតែថ្នាំវីតាមីនសេ និងជាតិដែក", isCorrect: false },
+      { text: "ប្រើ Praziquantel គ្រប់ករណីទាំងអស់", isCorrect: false }
+    ],
+    rationale: "ការព្យាបាលអាម៉ីប៖ បើប៉ះពាល់ជាលិកា (Tissue: ពោះវៀនធំជ្រៅ ឬបូសថ្លើម) ត្រូវប្រើ Metronidazole ឬ Tinidazole។ បន្ទាប់មកត្រូវបន្ថែម Luminal amebicide (ដូចជា Diloxanide furoate ឬ Paromomycin) ដើម្បីកម្ចាត់គីសក្នុងប្រហោងពោះវៀន។"
+  },
+  {
+    topic: "Giardia lamblia — Trophozoite Morphology",
+    title: "ក្រោមមីក្រូទស្សន៍ អ្នកបច្ចេកទេសពិនិត្យឃើញ Trophozoite រាងដូចផ្លែសារី ឬរ៉ាកែតវាយកូនបាល់ មានស្នូលមូល ២ ដូចពាក់វ៉ែនតា និងមានទង់រំពាត់ ៤ គូ។ តើជាប៉ារ៉ាស៊ីតអ្វី?",
+    hint: "Giardia lamblia (ចលនាហែលដូចស្លឹកឈើជ្រុះ - Falling leaf motility)។",
+    svg: `<svg width="200" height="95" viewBox="0 0 200 95"><path d="M 100,10 C 60,10 65,55 100,85 C 135,55 140,10 100,10 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/><circle cx="85" cy="30" r="10" fill="#334155" stroke="#f59e0b"/><circle cx="85" cy="30" r="3" fill="#f8fafc"/><circle cx="115" cy="30" r="10" fill="#334155" stroke="#f59e0b"/><circle cx="115" cy="30" r="3" fill="#f8fafc"/><path d="M 100,20 L 100,85" stroke="#94a3b8" stroke-width="2"/><path d="M 90,82 Q 80,95 70,92 M 110,82 Q 120,95 130,92 M 80,45 Q 50,55 45,70 M 120,45 Q 150,55 155,70" fill="none" stroke="#38bdf8" stroke-width="1.8"/><text x="100" y="55" fill="#94a3b8" font-size="8" text-anchor="middle">Sucking disc</text></svg>`,
+    options: [
+      { text: "Giardia lamblia (Trophozoite)", isCorrect: true },
+      { text: "Entamoeba histolytica", isCorrect: false },
+      { text: "Trichomonas vaginalis", isCorrect: false },
+      { text: "Balantidium coli", isCorrect: false }
+    ],
+    rationale: "Trophozoite របស់ Giardia lamblia មានរាងដូចផ្លែសារី (Pear-shaped / Tennis racket), មានស្នូល ២ សងខាងដូចភ្នែកវ៉ែនតា, មានបន្ទះបឺត (Sucking disc) នៅពោះ និងមានទង់រំពាត់ ៤ គូ (8 flagella)។"
+  },
+  {
+    topic: "Giardia lamblia — Clinical Stool Characteristic",
+    title: "អ្នកជំងឺឆ្លង Giardia lamblia កើតមានរាគផ្អួរខ្លាំង។ តើលាមករបស់អ្នកជំងឺមានលក្ខណៈបែបណាដែលខុសប្លែកពីរាគមួលអាម៉ីប?",
+    hint: "រាគមានជាតិខ្លាញ់ច្រើន (Steatorrhea) អណ្តែតទឹក ក្លិនស្អុយខ្លាំង តែគ្មានឈាមឡើយ។",
+    options: [
+      { text: "លាមកមានស្លេស្មខ្លាញ់ច្រើន (Steatorrhea) គ្មានឈាម និងក្លិនស្អុយខ្លាំង", isCorrect: true },
+      { text: "លាមកមានឈាមសុទ្ធក្រហមច្រាល", isCorrect: false },
+      { text: "លាមករឹងស្ងួតដូចលាមកពពែ", isCorrect: false },
+      { text: "លាមកមានពណ៌សកំបោរគ្មានក្លិន", isCorrect: false }
+    ],
+    rationale: "Giardia តោងជាប់នឹង mucosa នៃ duodenum និង jejunum បង្កការរារាំងការស្រូបយកជាតិខ្លាញ់ (Malabsorption) នាំឱ្យលាមករាគមានសភាពរអិលខ្លាញ់ (Steatorrhea) ក្លិនស្អុយខ្លាំង និងគ្មានឈាមទេ (ខុសពីអាម៉ីបដែលមានឈាម)។"
+  },
+  {
+    topic: "Trichomonas vaginalis — Life Cycle Peculiarity",
+    title: "តើលក្ខណៈពិសេសមួយណាដែលខុសប្លែកពី Protozoa ក្នុងពោះវៀនដទៃទៀត ទាក់ទងនឹងវដ្តជីវិតរបស់ Trichomonas vaginalis?",
+    hint: "ប៉ារ៉ាស៊ីតនេះគ្មានដំណាក់កាលគីស (No cyst stage) ឡើយ។",
+    options: [
+      { text: "មានតែដំណាក់កាល Trophozoite ប៉ុណ្ណោះ គ្មានដំណាក់កាល Cyst ឡើយ", isCorrect: true },
+      { text: "មានដំណាក់កាល Cyst រហូតដល់ ៨ ស្នូល", isCorrect: false },
+      { text: "ឆ្លងតាមរយៈការញ៉ាំទឹកមិនដាំពុះ", isCorrect: false },
+      { text: "ត្រូវការសត្វមូសខាំដើម្បីបញ្ចប់វដ្តជីវិត", isCorrect: false }
+    ],
+    rationale: "Trichomonas vaginalis មិនមានដំណាក់កាល Cyst ឡើយ (Exists only as trophozoite)។ ហេតុនេះហើយបានជាវាមិនអាចរស់នៅបានយូរក្នុងបរិស្ថានខាងក្រៅ ហើយឆ្លងស្ទើរតែទាំងស្រុងតាមការរួមភេទ (Sexual transmission)។"
+  },
+  {
+    topic: "Trichomonas vaginalis — Laboratory Wet Mount",
+    title: "ដើម្បីធ្វើរោគវិនិច្ឆ័យរក Trichomonas vaginalis តាមវិធីពិនិត្យទឹកទឹករំអិលទ្វារមាសស្រស់ (Saline wet mount) ហេតុអ្វីបានជាត្រូវពិនិត្យក្រោមមីក្រូទស្សន៍ជាបន្ទាន់ក្នុងរយៈពេល ១០-២០ នាទី?",
+    hint: "Trophozoite ងាយងាប់ និងបាត់បង់ចលនារមួលរហ័ស (Jerky motility)។",
+    options: [
+      { text: "ដើម្បីសង្កេតមើលចលនារមួលរហ័ស (Jerky / Motile movement) មុនពេលដង្កូវត្រជាក់ងាប់", isCorrect: true },
+      { text: "ព្រោះគីសរបស់វានឹងញាស់អស់ក្នុងរយៈពេលកន្លះម៉ោង", isCorrect: false },
+      { text: "ដើម្បីកុំឱ្យស្លាយប្រែជាពណ៌ខ្មៅ", isCorrect: false },
+      { text: "ព្រោះមេរោគនឹងស៊ីកោសិកា epithelial cells អស់", isCorrect: false }
+    ],
+    rationale: "Trophozoite របស់ Trichomonas vaginalis ងាយនឹងបាត់បង់ចលនា និងងាប់នៅសីតុណ្ហភាពបន្ទប់។ ការពិនិត្យស្រស់ភ្លាមៗ (ក្នុងរង្វង់ ១០-២០ នាទី) ជួយឱ្យអ្នកបច្ចេកទេសសង្កេតឃើញចលនារមួលរហ័ស (Jerky motility) និង undulating membrane របស់វា។"
+  },
+  {
+    topic: "Trichomonas vaginalis — Management Principle",
+    title: "នៅពេលរកឃើញស្ត្រីម្នាក់មានជំងឺ Trichomoniasis តើគោលការណ៍ព្យាបាលដ៏សំខាន់បំផុតមួយណាដែលត្រូវអនុវត្តដើម្បីបង្ការកុំឱ្យកើតឡើងវិញ (Relapse)?",
+    hint: "ត្រូវព្យាបាលដៃគូទាំងសងខាង (Treat both sexual partners)។",
+    options: [
+      { text: "ត្រូវព្យាបាលដៃគូស្នេហាទាំងសងខាងក្នុងពេលតែមួយ (Treat both partners)", isCorrect: true },
+      { text: "ព្យាបាលតែស្ត្រីដែលមានរោគសញ្ញាតែប៉ុណ្ណោះ", isCorrect: false },
+      { text: "ឱ្យអ្នកជំងឺងូតទឹកក្តៅជារៀងរាល់ថ្ងៃដោយមិនបាច់លេបថ្នាំ", isCorrect: false },
+      { text: "ចាក់វ៉ាក់សាំងការពារជំងឺកាមរោគ", isCorrect: false }
+    ],
+    rationale: "បុរសភាគច្រើនឆ្លង Trichomonas គ្មានចេញរោគសញ្ញាទេ ប៉ុន្តែជាអ្នកចម្លងមេរោគ។ ដូច្នេះត្រូវតែព្យាបាលដៃគូទាំងសងខាង (Treat both sexual partners) ដំណាលគ្នា និងផ្អាករួមភេទមួយសប្តាហ៍ ដើម្បីកុំឱ្យឆ្លងត្រឡប់ទៅមក (Ping-pong infection)។"
+  },
+  {
+    topic: "Trypanosoma brucei — Vector & Pathology",
+    title: "Trypanosoma brucei បង្កជាជំងឺដេកលក់នៅអាហ្វ្រិក (African sleeping sickness)។ តើសត្វល្អិតណាជាវ៉ិចទ័រចម្លងរបស់វា?",
+    hint: "រុយស៊ីឈាម Tsetse fly (Glossina)។",
+    options: [
+      { text: "រុយ Tsetse fly", isCorrect: true },
+      { text: "រុយខ្សាច់ Sandfly", isCorrect: false },
+      { text: "មូសខ្លា Aedes", isCorrect: false },
+      { text: "សត្វចៃ Triatomine bug", isCorrect: false }
+    ],
+    rationale: "Trypanosoma brucei (បង្ក African trypanosomiasis / Sleeping sickness) ត្រូវបានចម្លងដោយរុយ Tsetse fly តាមរយៈទឹកមាត់ពេលខាំបឺតឈាម។"
+  },
+  {
+    topic: "Leishmania — Vector & Intracellular Form",
+    title: "Leishmania គឺជាប៉ារ៉ាស៊ីតដែលរស់នៅក្នុងកោសិកាម៉ាក្រូហ្វាស (Macrophage)។ តើវាត្រូវបានចម្លងដោយសត្វល្អិតណា ហើយស្ថិតក្នុងទម្រង់អ្វីក្នុងកោសិកាមនុស្ស?",
+    hint: "ចម្លងដោយរុយខ្សាច់ Sandfly និងមានទម្រង់ Amastigote ក្នុង macrophage។",
+    options: [
+      { text: "ចម្លងដោយរុយខ្សាច់ Sandfly ហើយស្ថិតក្នុងទម្រង់ Amastigote ក្នុង macrophage", isCorrect: true },
+      { text: "ចម្លងដោយមូស Anopheles ហើយស្ថិតក្នុងទម្រង់ Trophozoite", isCorrect: false },
+      { text: "ចម្លងដោយរុយ Tsetse fly ហើយស្ថិតក្នុងទម្រង់ Promastigote", isCorrect: false },
+      { text: "ចម្លងតាមការញ៉ាំទឹក ហើយស្ថិតក្នុងទម្រង់ Cyst", isCorrect: false }
+    ],
+    rationale: "Leishmania ត្រូវបានចម្លងដោយរុយខ្សាច់ញី (Female sandfly) បញ្ចូលទម្រង់ Promastigote។ នៅពេលចូលក្នុងខ្លួនមនុស្ស កោសិកា Macrophages លេបវាចូល ហើយវាក្លាយជាទម្រង់គ្មានកន្ទុយ Amastigotes (LD bodies) បន្តពូជខាងក្នុងកោសិកា។"
+  },
+  {
+    topic: "Malaria — Dangerous Species",
+    title: "ក្នុងចំណោមប្រភេទប្លាស្មូដ្យូមបង្កជំងឺគ្រុនចាញ់ តើប្រភេទមួយណាដែលបង្កគ្រោះថ្នាក់ធ្ងន់ធ្ងរដល់អាយុជីវិតញឹកញាប់បំផុត (Severe malaria / Cerebral malaria)?",
+    hint: "Plasmodium falciparum (វដ្ត ៤៨ ម៉ោង បង្កការស្ទះសរសៃឈាមខួរក្បាល)។",
+    options: [
+      { text: "Plasmodium falciparum", isCorrect: true },
+      { text: "Plasmodium vivax", isCorrect: false },
+      { text: "Plasmodium malariae", isCorrect: false },
+      { text: "Plasmodium ovale", isCorrect: false }
+    ],
+    rationale: "Plasmodium falciparum គឺជាប្រភេទកាចសាហាវបំផុត ព្រោះវាធ្វើឱ្យគ្រាប់ឈាមក្រហមស្អិតជាប់នឹងជញ្ជាំងសរសៃឈាម (Cytoadherence / Rosetting) បង្កឱ្យស្ទះសរសៃឈាមតូចៗក្នុងខួរក្បាល (Cerebral malaria) និងសរីរាង្គសំខាន់ៗ ដែលអាចបណ្តាលឱ្យស្លាប់បាន។"
+  },
+  {
+    topic: "Malaria — Life Cycle Stages",
+    title: "ក្នុងវដ្តជីវិតរបស់មេរោគគ្រុនចាញ់ តើដំណាក់កាលណាមួយដែលមូស Anopheles បញ្ចូលទៅក្នុងខ្លួនមនុស្សពេលខាំ ហើយដំណាក់កាលណាដែលមូសបឺតយកពីឈាមមនុស្សវិញ?",
+    hint: "មូសបញ្ជូន Sporozoites ចូលមនុស្ស ហើយបឺតយក Gametocytes ទៅវិញ។",
+    options: [
+      { text: "មូសចាក់បញ្ចូល Sporozoites ហើយបឺតយក Gametocytes", isCorrect: true },
+      { text: "មូសចាក់បញ្ចូល Merozoites ហើយបឺតយក Trophozoites", isCorrect: false },
+      { text: "មូសចាក់បញ្ចូល Schizonts ហើយបឺតយក Oocysts", isCorrect: false },
+      { text: "មូសចាក់បញ្ចូល Cysts ហើយបឺតយកដង្កូវ L3", isCorrect: false }
+    ],
+    rationale: "មូសដែកគោលញី Anopheles បញ្ចូលដំណាក់កាលបង្ករោគ Sporozoites (ពីក្រពេញទឹកមាត់) ទៅក្នុងចរន្តឈាមមនុស្ស។ ក្រោយមក ដំណាក់កាលភេទ Gametocytes ក្នុងគ្រាប់ឈាមក្រហមមនុស្ស ត្រូវបានមូសបឺតយកទៅវិញដើម្បីបន្តវដ្តបន្តពូជដោយភេទក្នុងខ្លួនមូស។"
+  },
+  {
+    topic: "Toxoplasma gondii — Definitive Host",
+    title: "តើសត្វមួយណាជាម្ចាស់ផ្ទះចុងក្រោយ (Definitive host) ធម្មជាតិតែមួយគត់របស់ Toxoplasma gondii ដែលបញ្ចេញ Oocysts មកក្រៅតាមលាមក?",
+    hint: "សត្វចិញ្ចឹមក្នុងផ្ទះដែលចូលចិត្តចាប់កណ្តុរ (សត្វឆ្មា)។",
+    options: [
+      { text: "សត្វឆ្មា និងសត្វត្រកូលឆ្មា (Cats / Felidae)", isCorrect: true },
+      { text: "សត្វឆ្កែ (Dogs)", isCorrect: false },
+      { text: "សត្វជ្រូក (Pigs)", isCorrect: false },
+      { text: "សត្វគោក្របី (Cattle)", isCorrect: false }
+    ],
+    rationale: "សត្វឆ្មា (Cats) គឺជា Definitive host តែមួយគត់របស់ Toxoplasma gondii ដែលវដ្តបន្តពូជដោយភេទ (Enteric sexual cycle) ប្រព្រឹត្តទៅក្នុងពោះវៀនឆ្មា ហើយបញ្ចេញ Oocysts មកក្រៅតាមលាមក។"
+  },
+  {
+    topic: "Toxoplasma gondii — Congenital Risk",
+    title: "ហេតុអ្វីបានជាស្ត្រីមានផ្ទៃពោះត្រូវបានណែនាំឱ្យជៀសវាងការប៉ះពាល់អាចម៍ឆ្មា ឬញ៉ាំសាច់មិនឆ្អិនល្អ?",
+    hint: "មេរោគឆ្លងតាមទងសុកបង្កគ្រោះថ្នាក់ដល់ទារកក្នុងផ្ទៃ (Miscarriage, Chorioretinitis)។",
+    options: [
+      { text: "ព្រោះ Tachyzoites អាចឆ្លងកាត់សុកទៅទារក បង្កឱ្យរលូតកូន ឬពិការភាពពីកំណើត (Congenital toxoplasmosis)", isCorrect: true },
+      { text: "ព្រោះធ្វើឱ្យម្តាយកើតជំងឺគ្រុនចាញ់ភ្លាមៗ", isCorrect: false },
+      { text: "ព្រោះធ្វើឱ្យទារកកើតមកមានធ្មេញស្រួច", isCorrect: false },
+      { text: "ព្រោះធ្វើឱ្យបាត់បង់ទឹកដោះម្តាយទាំងស្រុង", isCorrect: false }
+    ],
+    rationale: "ប្រសិនបើស្ត្រីមានផ្ទៃពោះឆ្លង Toxoplasma ដំបូងអំឡុងពេលពពោះ មេរោគទម្រង់ Tachyzoites អាចឆ្លងកាត់ទងសុក (Transplacental transmission) ទៅបំផ្លាញទារក បង្កឱ្យរលូតកូន កើតមិនគ្រប់ខែ ដំបៅភ្នែក (Chorioretinitis) ឬប៉ះពាល់ខួរក្បាល (Hydrocephalus)។"
+  },
+  {
+    topic: "Balantidium coli — General Characteristics",
+    title: "Balantidium coli គឺជាប៉ារ៉ាស៊ីត Protozoa តែមួយគត់របស់មនុស្សដែលស្ថិតក្នុងក្រុម Ciliates។ តើសត្វណាជាជង្រុកស្តុកមេរោគធម្មជាតិ (Reservoir host) ដ៏ចម្បងរបស់វា?",
+    hint: "សត្វចិញ្ចឹមកសិដ្ឋានដែលចូលចិត្តដេកក្នុងភក់ (សត្វជ្រូក)។",
+    options: [
+      { text: "សត្វជ្រូក (Pigs)", isCorrect: true },
+      { text: "សត្វឆ្មា (Cats)", isCorrect: false },
+      { text: "សត្វសេះ (Horses)", isCorrect: false },
+      { text: "សត្វមាន់ទា (Poultry)", isCorrect: false }
+    ],
+    rationale: "សត្វជ្រូក (Pig) គឺជា reservoir host ធម្មជាតិដ៏សំខាន់បំផុតរបស់ Balantidium coli។ មនុស្សឆ្លងជាយថាហេតុ (Accidental host) តាមរយៈការផឹកទឹក ឬចំណីអាហារដែលមានប្រឡាក់លាមកជ្រូកផ្ទុកគីស Balantidium coli។"
+  }
+];
+
+function shuffleArray(arr) {
+  const newArr = [...arr];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+}
+
+let activeQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let timeLeft = 60;
+let timerInterval = null;
+let answered = false;
+let userResults = [];
+
+function initQuiz() {
+  activeQuestions = shuffleArray(rawQuestions).map(q => {
+    return {
+      ...q,
+      options: shuffleArray(q.options)
+    };
+  });
+  
+  currentIndex = 0;
+  score = 0;
+  userResults = [];
+  document.getElementById('finalCard').style.display = 'none';
+  document.getElementById('quizCard').style.display = 'block';
+  loadQuestion(currentIndex);
+}
+
+function loadQuestion(index) {
+  answered = false;
+  timeLeft = 60;
+  clearInterval(timerInterval);
+  
+  const q = activeQuestions[index];
+  document.getElementById('topicBadge').textContent = q.topic;
+  document.getElementById('qCount').textContent = `សំណួរទី ${index + 1} នៃ ${activeQuestions.length}`;
+  document.getElementById('questionTitle').textContent = `${index + 1}. ${q.title}`;
+  
+  const diagBox = document.getElementById('diagramContainer');
+  if (q.svg) {
+    diagBox.innerHTML = q.svg;
+    diagBox.style.display = 'flex';
+  } else {
+    diagBox.innerHTML = '';
+    diagBox.style.display = 'none';
+  }
+
+  document.getElementById('hintContent').textContent = q.hint;
+  document.getElementById('hintContent').style.display = 'none';
+  document.getElementById('feedbackBox').style.display = 'none';
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('nextBtn').textContent = (index === activeQuestions.length - 1) ? "ពិនិត្យលទ្ធផល →" : "សំណួរបន្ទាប់ →";
+  
+  const optionsGrid = document.getElementById('optionsGrid');
+  optionsGrid.innerHTML = '';
+  q.options.forEach((optObj, optIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="letter">${String.fromCharCode(65 + optIdx)}.</span> <span>${optObj.text}</span>`;
+    btn.onclick = () => selectOption(optIdx);
+    optionsGrid.appendChild(btn);
+  });
+  
+  updateTimerUI();
+  timerInterval = setInterval(() => {
+    if (timeLeft > 0) {
+      timeLeft--;
+      updateTimerUI();
+    } else {
+      clearInterval(timerInterval);
+      if (!answered) {
+        handleTimeout();
+      }
+    }
+  }, 1000);
+  
+  updateProgress();
+}
+
+function updateTimerUI() {
+  const el = document.getElementById('timerText');
+  const box = document.getElementById('timerBox');
+  el.textContent = timeLeft + 's';
+  if (timeLeft <= 10) {
+    box.classList.add('urgent');
+  } else {
+    box.classList.remove('urgent');
+  }
+}
+
+function toggleHint() {
+  const h = document.getElementById('hintContent');
+  h.style.display = h.style.display === 'none' ? 'block' : 'none';
+}
+
+function selectOption(chosenIdx) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+  
+  const q = activeQuestions[currentIndex];
+  const buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(btn => btn.disabled = true);
+  
+  const correctIdx = q.options.findIndex(o => o.isCorrect);
+  const isCorrect = q.options[chosenIdx].isCorrect;
+  
+  if (isCorrect) {
+    score++;
+    buttons[chosenIdx].classList.add('correct');
+  } else {
+    buttons[chosenIdx].classList.add('wrong');
+    buttons[correctIdx].classList.add('correct');
+  }
+  
+  userResults.push({
+    q: q.title,
+    chosen: q.options[chosenIdx].text,
+    correctText: q.options[correctIdx].text,
+    isCorrect: isCorrect,
+    why: q.rationale
+  });
+  
+  document.getElementById('liveScore').textContent = `ពិន្ទុ: ${score} / ${currentIndex + 1}`;
+  document.getElementById('feedbackText').textContent = q.rationale;
+  document.getElementById('feedbackBox').style.display = 'block';
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function handleTimeout() {
+  answered = true;
+  const q = activeQuestions[currentIndex];
+  const buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(btn => btn.disabled = true);
+  const correctIdx = q.options.findIndex(o => o.isCorrect);
+  buttons[correctIdx].classList.add('correct');
+  
+  userResults.push({
+    q: q.title,
+    chosen: "អស់ពេល (Time Expired)",
+    correctText: q.options[correctIdx].text,
+    isCorrect: false,
+    why: q.rationale
+  });
+  
+  document.getElementById('feedbackText').innerHTML = '<strong style="color:#ef4444;">អស់ពេល ៦០ វិនាទី! (Time Expired)</strong><br>' + q.rationale;
+  document.getElementById('feedbackBox').style.display = 'block';
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex < activeQuestions.length) {
+    loadQuestion(currentIndex);
+  } else {
+    showFinalResults();
+  }
+}
+
+function updateProgress() {
+  const pct = ((currentIndex + 1) / activeQuestions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function showFinalResults() {
+  document.getElementById('quizCard').style.display = 'none';
+  document.getElementById('finalCard').style.display = 'block';
+  const pct = Math.round((score / activeQuestions.length) * 100);
+  document.getElementById('finalScoreVal').textContent = `${score} / ${activeQuestions.length} (${pct}%)`;
+  
+  let msg = '';
+  if (pct >= 80) msg = 'ល្អប្រសើរណាស់! អ្នកយល់ច្បាស់ពីមេរៀន Trematodes និង Protozoa សម្រាប់ត្រៀមប្រឡងឆមាស។';
+  else if (pct >= 60) msg = 'លទ្ធផលល្អបង្គួរ! គួររំលឹកបន្ថែមលើវ៉ិចទ័រចម្លង (Vectors), ទម្រង់ Ameba/Giardia និងប្រភេទប្លាស្មូដ្យូម។';
+  else msg = 'ត្រូវរំលឹកមេរៀនឡើងវិញ ជាពិសេសរូបរាងពងព្រូនស្លឹក និងវដ្តជីវិតរបស់ប្រូតូសូ។';
+  document.getElementById('finalFeedback').textContent = msg;
+
+  const reviewEl = document.getElementById('reviewContainer');
+  reviewEl.innerHTML = '<h3 style="margin-bottom:12px; color:var(--primary);">ពិនិត្យចម្លើយលម្អិត (Answer Review):</h3>' + 
+    userResults.map((r, i) => `
+      <details class="review-item">
+        <summary>${i + 1}. ${r.isCorrect ? "✓ ត្រឹមត្រូវ" : "✗ ខុស"} — ${r.q.substring(0, 50)}...</summary>
+        <p><strong>សំណួរពេញលេញ៖</strong> ${r.q}</p>
+        <p><strong>ចម្លើយរបស់អ្នក៖</strong> <span style="color:${r.isCorrect ? '#86efac' : '#fca5a5'}">${r.chosen}</span></p>
+        <p><strong>ចម្លើយត្រឹមត្រូវ៖</strong> <span style="color:#86efac">${r.correctText}</span></p>
+        <p><strong>ការពន្យល់៖</strong> ${r.why}</p>
+      </details>
+    `).join('');
+}
+
+window.onload = initQuiz;
+</script>
+</body>
+</html>
